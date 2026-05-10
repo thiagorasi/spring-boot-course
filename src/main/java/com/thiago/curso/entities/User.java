@@ -1,8 +1,11 @@
 package com.thiago.curso.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity //informa que a classe deve mapeada para objeto relacional
@@ -17,6 +20,10 @@ public class User implements Serializable {
     private String email;
     private String phone;
     private String password;
+
+    @JsonIgnore // para evitar o problema de referência cíclica, ou seja, quando a classe User tem uma lista de Order e a classe Order tem um atributo do tipo User, isso pode causar um loop infinito na hora de serializar os objetos para JSON. A anotação @JsonIgnore é usada para indicar que o atributo orders deve ser ignorado durante a serialização, evitando assim esse problema.
+    @OneToMany(mappedBy = "client") // mapeamento do relacionamento, o "client" é o nome do atributo da classe Order que referencia a classe User
+    private List<Order> orders = new ArrayList<>();
 
     public User() {
     }
@@ -67,6 +74,10 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
     }
 
     @Override
