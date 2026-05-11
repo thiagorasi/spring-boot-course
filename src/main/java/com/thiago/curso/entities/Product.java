@@ -19,7 +19,7 @@ public class Product implements Serializable {
     private Double price;
     private String imgUrl;
 
-    @ManyToOne // quando temos uma relação MUITO PARA MUITOS, a representação no banco de dados é uma nova tabela de ligação
+    @ManyToMany // quando temos uma relação MUITO PARA MUITOS, a representação no banco de dados é uma nova tabela de ligação
     @JoinTable(name = "tb_product_category", // nome da tabela de ligação
             joinColumns = @JoinColumn(name = "product_id"), // chave estrangeira que referencia a tabela Product
             inverseJoinColumns = @JoinColumn(name = "category_id")) // chave estrangeira que referencia a tabela Category

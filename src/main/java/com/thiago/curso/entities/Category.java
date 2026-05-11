@@ -14,7 +14,7 @@ public class Category implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
     private String name;
 
     @JsonIgnore // para evitar o problema de referência cíclica na serialização do JSON. Sem essa anotação, quando o Jackson tenta serializar um objeto Category, ele também tenta serializar os produtos associados a essa categoria. E cada produto, por sua vez, tem uma referência de volta para a categoria, o que leva a um loop infinito de serialização.
@@ -24,17 +24,18 @@ public class Category implements Serializable {
     public Category() {
     }
 
-    public Category(Long id, String name) { // não instanciamos coleções, pois já são instanciadas na declaração do atributo
-        Id = id;
+    // não se inclui coleções em construtores, pois já são instanciadas na declaração do atributo
+    public Category(Long id, String name) {
+        this.id = id;
         this.name = name;
     }
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getName() {
@@ -52,11 +53,11 @@ public class Category implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Category category)) return false;
-        return Objects.equals(Id, category.Id);
+        return Objects.equals(id, category.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(Id);
+        return Objects.hashCode(id);
     }
 }
