@@ -12,6 +12,8 @@ import java.util.Objects;
 @Table(name = "tb_order") // como Order é uma palavra reservada no JPA, devemos informar por aqui
 public class Order implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
