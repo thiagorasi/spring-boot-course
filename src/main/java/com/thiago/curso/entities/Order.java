@@ -6,7 +6,9 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "tb_order") // como Order é uma palavra reservada no JPA, devemos informar por aqui
@@ -27,6 +29,10 @@ public class Order implements Serializable {
     @ManyToOne // chave estrangeira
     @JoinColumn(name = "cliend_id") // nome da chave estrangeira
     private User client;
+
+    // representa a associação
+    @OneToMany(mappedBy = "id.order") // mapeamento do lado inverso, ou seja, o atributo order da classe OrderItemPk é o responsável por mapear a associação entre Order e OrderItem
+    private Set<OrderItem> items =  new HashSet<>();
 
     public Order() {
     }
@@ -68,6 +74,10 @@ public class Order implements Serializable {
 
     public void setClient(User client) {
         this.client = client;
+    }
+
+    public Set<OrderItem> getItems() {
+        return items;
     }
 
     @Override
