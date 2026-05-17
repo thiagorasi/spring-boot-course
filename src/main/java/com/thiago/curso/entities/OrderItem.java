@@ -67,6 +67,12 @@ public class OrderItem implements Serializable {
         this.price = price;
     }
 
+    //metodo subtotal
+    // public subTotal() { // mas para aparecer no Json...
+    public Double getSubTotal() { // ... a plataforma requer get.
+        return price * quantity;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof OrderItem orderItem)) return false;

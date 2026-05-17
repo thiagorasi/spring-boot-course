@@ -1,5 +1,6 @@
 package com.thiago.curso.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -12,21 +13,22 @@ public class Payment implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ig;
+    private Long id;
     private Instant moment;
 
     //associação
+    @JsonIgnore // para evitar que o JSON entre em loop infinito, ou seja, quando o JSON for serializado, ele vai ignorar este método, ou seja, ele não vai serializar o atributo order, evitando assim o loop infinito.
     @OneToOne
-    @MapsId // esta anotação serve para
+    @MapsId // esta anotação serve para indicar que o ID da entidade Payment é o mesmo que o ID da entidade Order, ou seja, a chave primária de Payment é a mesma chave primária de Order. Isso é necessário porque a associação entre Payment e Order é do tipo um-para-um, ou seja, cada pagamento está associado a um único pedido e vice-versa. Com essa anotação, o JPA entende que o ID de Payment deve ser igual ao ID de Order, garantindo assim a integridade referencial entre as duas entidades.
     private Order order;
 
     public Payment (){
     }
 
-    public Payment(Order order, Instant moment, Long ig) {
+    public Payment(Order order, Instant moment, Long id) {
         this.order = order;
         this.moment = moment;
-        this.ig = ig;
+        this.id = id;
     }
 
     public Long getIg() {
