@@ -34,6 +34,10 @@ public class Order implements Serializable {
     @OneToMany(mappedBy = "id.order") // mapeamento do lado inverso, ou seja, o atributo order da classe OrderItemPk é o responsável por mapear a associação entre Order e OrderItem
     private Set<OrderItem> items =  new HashSet<>();
 
+    //assoicação
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL) // cascade = CascadeType.ALL é usado para indicar que todas as operações de persistência (como salvar, atualizar, excluir) realizadas na entidade Order devem ser propagadas para a entidade Payment associada. Isso significa que, por exemplo, se um pedido for excluído, o pagamento associado a esse pedido também será excluído automaticamente.
+    private Payment payment;
+
     public Order() {
     }
 
@@ -74,6 +78,14 @@ public class Order implements Serializable {
 
     public void setClient(User client) {
         this.client = client;
+    }
+
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
     }
 
     public Set<OrderItem> getItems() {
