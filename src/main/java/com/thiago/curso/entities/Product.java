@@ -1,5 +1,6 @@
 package com.thiago.curso.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -24,6 +25,9 @@ public class Product implements Serializable {
             joinColumns = @JoinColumn(name = "product_id"), // chave estrangeira que referencia a tabela Product
             inverseJoinColumns = @JoinColumn(name = "category_id")) // chave estrangeira que referencia a tabela Category
     private Set<Category> categories = new HashSet<>(); // aqui utilizamos SET ao invés de LIST para garantir que não tenhamos 01 produto com mais de uma ocorrência na mesma categoria
+
+    @OneToMany(mappedBy = "id.product")
+    private Set<OrderItem> items = new HashSet<>();
 
     public Product() {
     }
@@ -78,6 +82,15 @@ public class Product implements Serializable {
 
     public Set<Category> getCategories() {
         return categories;
+    }
+
+    @JsonIgnore
+    public Set<Order> getOrders() {
+        Set<Order> orders = new HashSet<>();
+        for (OrderItem oi : items) {
+            orders.add(oi.getOrder());
+        }
+        return orders;
     }
 
     @Override
