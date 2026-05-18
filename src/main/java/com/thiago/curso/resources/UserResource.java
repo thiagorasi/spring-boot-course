@@ -47,4 +47,10 @@ public class UserResource {
                 .toUri(); // este código serve para criar um URI para o recurso recém criado, ou seja, ele pega a URI da requisição atual, adiciona o ID do usuário recém criado e transforma isso em um URI.
         return ResponseEntity.created(uri).body(obj); // o método created espera um URI como argumento, mas como ainda não temos um endpoint para acessar o usuário recém criado, podemos passar null por enquanto.
     }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id){ // anotação necessária para que o id seja reconhecido como variável da URL
+        userService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }
