@@ -3,6 +3,7 @@ package com.thiago.curso.services;
 import com.thiago.curso.entities.User;
 import com.thiago.curso.repositories.UserRepository;
 import com.thiago.curso.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -44,10 +45,13 @@ public class UserService {
     }
 
     public User update(Long id, User obj){ // id para indicar qual usuáiro será atualizado e obj para indicar os novos dados do usuário
-        User user = userRepository.getReferenceById(id); // este método getReferenceById é um método do JPA que retorna uma referência para o objeto com o ID especificado, sem acessar o banco de dados. Ele é útil para atualizar um objeto, pois ele permite que você obtenha uma referência para o objeto sem precisar carregá-lo completamente do banco de dados. Isso é especialmente útil quando você só precisa atualizar alguns campos do objeto e não precisa acessar todos os seus dados.
-        updateData(user, obj); // método auxiliar para atualizar os dados do usuário
-        return userRepository.save(user); // salva o usuário atualizado no banco de dados
-
+        try {
+            User user = userRepository.getOne(id); // este método getReferenceById é um método do JPA que retorna uma referência para o objeto com o ID especificado, sem acessar o banco de dados. Ele é útil para atualizar um objeto, pois ele permite que você obtenha uma referência para o objeto sem precisar carregá-lo completamente do banco de dados. Isso é especialmente útil quando você só precisa atualizar alguns campos do objeto e não precisa acessar todos os seus dados.
+            updateData(user, obj); // método auxiliar para atualizar os dados do usuário
+            return userRepository.save(user); // salva o usuário atualizado no banco de dados
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException(id);
+        }
     }
 
     private void updateData(User user, User obj) {
