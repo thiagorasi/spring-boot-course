@@ -5,7 +5,9 @@ import com.thiago.curso.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController // indica que esta classe é um rest controller
@@ -31,5 +33,18 @@ public class UserResource {
     public ResponseEntity<User> findById(@PathVariable(value = "id") Long id) { // estou dizendo para o spring que o id é um path value.
         User user = userService.findById(id);
         return ResponseEntity.ok().body(user);
+    }
+
+    @PostMapping
+    public ResponseEntity<User> insert(@RequestBody User obj){ // Anotação necessária para dizer que esse objeto vai chegar no modo Json na hora de fazer a requisição e esse Json vai desserializado para o objeto User
+        obj = userService.insert(obj);
+        // return ResponseEntity.ok().body(obj); //quando inserimos, a boa prática é retornar 201 e não 200...
+        //...por isso é melhor usar .created ao invés de .ok :
+        URI uri =  ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(obj.getId())
+                .toUri(); // este código serve para criar um URI para o recurso recém criado, ou seja, ele pega a URI da requisição atual, adiciona o ID do usuário recém criado e transforma isso em um URI.
+        return ResponseEntity.created(uri).body(obj); // o método created espera um URI como argumento, mas como ainda não temos um endpoint para acessar o usuário recém criado, podemos passar null por enquanto.
     }
 }

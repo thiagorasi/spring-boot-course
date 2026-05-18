@@ -22,21 +22,22 @@ public class Payment implements Serializable {
     @MapsId // esta anotação serve para indicar que o ID da entidade Payment é o mesmo que o ID da entidade Order, ou seja, a chave primária de Payment é a mesma chave primária de Order. Isso é necessário porque a associação entre Payment e Order é do tipo um-para-um, ou seja, cada pagamento está associado a um único pedido e vice-versa. Com essa anotação, o JPA entende que o ID de Payment deve ser igual ao ID de Order, garantindo assim a integridade referencial entre as duas entidades.
     private Order order;
 
-    public Payment (){
+    public Payment () {
     }
 
-    public Payment(Order order, Instant moment, Long id) {
-        this.order = order;
-        this.moment = moment;
+    public Payment(Long id, Instant moment, Order order) {
+        super();
         this.id = id;
+        this.moment = moment;
+        this.order = order;
     }
 
-    public Long getIg() {
-        return ig;
+    public Long getId() {
+        return id;
     }
 
-    public void setIg(Long ig) {
-        this.ig = ig;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Instant getMoment() {
@@ -58,11 +59,11 @@ public class Payment implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Payment payment)) return false;
-        return Objects.equals(ig, payment.ig);
+        return Objects.equals(id, payment.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(ig);
+        return Objects.hashCode(id);
     }
 }
