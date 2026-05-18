@@ -53,4 +53,10 @@ public class UserResource {
         userService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping(value = "/{id}") // método http utilizado para atualizar recursos
+    public ResponseEntity<User> update(@PathVariable Long id,  @RequestBody User obj){
+        obj = userService.update(id, obj);
+        return ResponseEntity.ok().body(obj);
+    }
 }

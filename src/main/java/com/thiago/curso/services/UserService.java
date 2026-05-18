@@ -30,4 +30,17 @@ public class UserService {
     public void delete(Long id){
         userRepository.deleteById(id);
     }
+
+    public User update(Long id, User obj){ // id para indicar qual usuáiro será atualizado e obj para indicar os novos dados do usuário
+        User user = userRepository.getReferenceById(id); // este método getReferenceById é um método do JPA que retorna uma referência para o objeto com o ID especificado, sem acessar o banco de dados. Ele é útil para atualizar um objeto, pois ele permite que você obtenha uma referência para o objeto sem precisar carregá-lo completamente do banco de dados. Isso é especialmente útil quando você só precisa atualizar alguns campos do objeto e não precisa acessar todos os seus dados.
+        updateData(user, obj); // método auxiliar para atualizar os dados do usuário
+        return userRepository.save(user); // salva o usuário atualizado no banco de dados
+
+    }
+
+    private void updateData(User user, User obj) {
+        user.setName(obj.getName());
+        user.setEmail(obj.getEmail());
+        user.setPhone(obj.getPhone());
+    }
 }
