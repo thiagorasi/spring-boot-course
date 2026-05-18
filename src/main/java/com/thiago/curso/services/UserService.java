@@ -2,10 +2,12 @@ package com.thiago.curso.services;
 
 import com.thiago.curso.entities.User;
 import com.thiago.curso.repositories.UserRepository;
+import com.thiago.curso.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -20,7 +22,9 @@ public class UserService {
     }
 
     public User findById(Long id){
-        return userRepository.findById(id).get();
+        Optional<User> user = userRepository.findById(id);
+        // return userRepository.findById(id).get(); // isso até funciona, mas não trata o caso de recurso não encontrado e retorna 500, o que não é boa prática neste caso.
+        return user.orElseThrow(() -> new ResourceNotFoundException(id)); // este código é para tratar o caso de o usuário não ser encontrado, ou seja, ele retorna um Optional e se o usuário não for encontrado, ele lança uma exceção personalizada ResourceNotFoundException.
     }
 
     public User insert(User obj){
